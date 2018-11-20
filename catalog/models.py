@@ -10,7 +10,7 @@ class Genre(models.Model):
     def __str__(self):
         # string for representing the model object
         return self.name
-
+    
 class Book(models.Model):
 
     title = models.CharField(max_length=200)
@@ -39,7 +39,7 @@ class BookInstance(models.Model):
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
-
+    
     LOAN_STATUS = (
         ('m', 'Maintenance'),
         ('o', 'On loan'),
