@@ -1,10 +1,8 @@
 from django.db import models
+
 from django.urls import reverse
 
-import uuid # Required for unique book instances
-
 class Genre(models.Model):
-
     name = models.CharField(max_length=200,help_text='Enter a book genre (e.g. Science Fiction)')
 
     def __str__(self):
@@ -12,7 +10,6 @@ class Genre(models.Model):
         return self.name
     
 class Book(models.Model):
-
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL,null=True)
     summary = models.TextField(max_length=1000, help_text='Enter a brief description of the book')
@@ -31,14 +28,33 @@ class Book(models.Model):
 
     display_genre.short_description = 'Genre'
 
+
+# Required for unique book instances
+import uuid 
+from datetime import date
+
+# Required to assign User as a borrower
+from django.contrib.auth.models import User
+
 # model representing a specific copy of the book that
 # can be borrowed from the library
 class BookInstance(models.Model):
-    
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,help_text='Unique Id for this particular book across the whole Library.')
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
+    borrower = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    @property
+    def is_overdue(self):
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
     
     LOAN_STATUS = (
         ('m', 'Maintenance'),
@@ -76,4 +92,16 @@ class Author(models.Model):
 
     def __str__(self):
         return f'{self.last_name}, {self.first_name}'
+
+class Language(models.Model):
+    name = models.CharField(
+        max_length=200,
+        help_text="Enter the book's natural language (e.g. English, French, Japanese etc.)"
+    )
+    
+    def __str__(self):
+        return self.name
+
+
+
         
