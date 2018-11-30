@@ -75,6 +75,17 @@ from catalog.forms import RenewBookForm
 
 
 
+from django.views.generic.edit import CreateView
+from  django.views.generic.edit import UpdateView
+from django.views.generic.edit import DeleteView
+from django.urls import reverse_lazy
+
+
+
+
+
+
+
 
 
 

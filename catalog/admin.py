@@ -27,7 +27,7 @@ class BookInstanceAdmin(admin.ModelAdmin):
     list_filter = ('status', 'due_back')
 
     # sectioning the detail view
-
+    
     fieldsets = (
         (None, {
             'fields': ('book', 'imprint', 'id'),
